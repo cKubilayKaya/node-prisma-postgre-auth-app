@@ -1,7 +1,6 @@
 import prisma from "./prisma.js";
 
 export const isUserExist = async (field, findByEmailOrUsername = false) => {
-  console.log("field", field);
   const existingUser = await prisma.user.findUnique({
     where: {
       [field.key]: field.value,

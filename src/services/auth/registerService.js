@@ -12,7 +12,8 @@ export const registerService = async (data) => {
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
 
-  const emailVerificationCode = generateVerificationCode(3);
+  const emailVerificationCode = generateVerificationCode();
+  const hashedEmailVerificationCode = await bcrypt.hash(emailVerificationCode, 10); // Hash'le
 
   const user = await prisma.user.create({
     data: {
@@ -20,13 +21,13 @@ export const registerService = async (data) => {
       username: username,
       email: email,
       password: hashedPassword,
-      emailVerificationCode: emailVerificationCode,
+      emailVerificationCode: hashedEmailVerificationCode,
     },
   });
 
   const emailResponse = await sendEmail(email, fullname, "Email Verification Code", emailVerificationHTML(emailVerificationCode));
 
-  if (!emailResponse || emailResponse.error) throw new Error("Email couldn't send.");
+  if (!emailResponse || emailResponse.error) throw new Error("Email couldn't be sent.");
 
   return user;
 };
