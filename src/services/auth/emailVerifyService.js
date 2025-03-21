@@ -1,6 +1,7 @@
 import { isUserExist } from "../../utils/isUserExist.js";
 import prisma from "../../utils/prisma.js";
 import bcrypt from "bcrypt";
+import { verificationTimeLimit } from "../../utils/verificationTimeLimit.js";
 
 export const emailVerifyService = async (emailVerificationCode, id) => {
   if (!emailVerificationCode || !id) {
@@ -11,6 +12,8 @@ export const emailVerifyService = async (emailVerificationCode, id) => {
 
   if (!user) throw new Error("There is no such a user!");
   if (user?.isEmailVerified) throw new Error("This user is already verified!");
+
+  verificationTimeLimit(user);
 
   const isMatch = await bcrypt.compare(emailVerificationCode, user.emailVerificationCode);
   if (!isMatch) throw new Error("Wrong Email Verification Code!");
