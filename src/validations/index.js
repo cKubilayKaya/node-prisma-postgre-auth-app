@@ -31,3 +31,10 @@ export const emailValidation = () =>
     "string.max": "Full name must be less than 30 characters",
     "any.required": "Email is required",
   });
+export const emailVerificationCode = () =>
+  Joi.string().min(6).max(6).required().messages({
+    "string.base": "Email Verification Code must be a string",
+    "string.min": "Full name must be at least 6 characters long",
+    "string.max": "Full name must be less than 6 characters",
+    "any.required": "Email Verification Code is required",
+  });

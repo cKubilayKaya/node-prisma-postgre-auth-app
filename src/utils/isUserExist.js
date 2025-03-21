@@ -1,13 +1,16 @@
 import prisma from "./prisma.js";
 
-export const isUserExist = async (email, username) => {
-  const existingUser = await prisma.user.findFirst({
+export const isUserExist = async (field, findByEmailOrUsername = false) => {
+  console.log("field", field);
+  const existingUser = await prisma.user.findUnique({
     where: {
-      OR: [{ email: email }, { username: username }],
+      [field.key]: field.value,
     },
   });
 
-  if (existingUser) throw new Error("This user already exists.");
-
-  return existingUser;
+  if (findByEmailOrUsername) {
+    return existingUser;
+  } else {
+    if (existingUser) throw new Error("This user already exists.");
+  }
 };
