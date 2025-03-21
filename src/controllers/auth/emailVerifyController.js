@@ -1,8 +1,7 @@
 import { emailVerifyService } from "../../services/auth/emailVerifyService.js";
 
 export const emailVerifyController = async (req, res) => {
-  const { emailVerificationCode } = req.body;
-  const { id } = req.params;
+  const { emailVerificationCode, id } = req.body;
 
   try {
     const updatedUser = await emailVerifyService(emailVerificationCode, id);

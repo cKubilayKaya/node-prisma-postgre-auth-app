@@ -12,7 +12,7 @@ const router = express.Router();
 
 router.post("/register", validationMiddleware(registerSchema), registerController);
 router.post("/login", validationMiddleware(loginSchema), loginController);
-router.post("/email-verify/:id", validationMiddleware(emailVerifySchema), emailVerifyController);
+router.post("/email-verify", validationMiddleware(emailVerifySchema), emailVerifyController);
 router.post("/resend-email", resendEmailVerifyController);
 
 export default router;
