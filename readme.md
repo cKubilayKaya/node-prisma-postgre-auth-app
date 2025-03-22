@@ -99,11 +99,6 @@ Content-Type: application/json
         "email": "test_user@test.com",
         "username": "test_user",
         "fullname": "Test User",
-        "isEmailVerified": false,
-        "emailVerificationCreatedAt": "2025-03-22T11:13:31.249Z",
-        "passwordResetExpires": null,
-        "wrongLoginAttempts": 0,
-        "isBlocked": false,
         "createdAt": "2025-03-22T11:13:31.249Z",
         "updatedAt": "2025-03-22T11:13:31.249Z"
     }
@@ -133,11 +128,8 @@ Content-Type: application/json
         "email": "test_user@test.com",
         "username": "test_user",
         "fullname": "Test User",
-        "isEmailVerified": false,
+        "isEmailVerified": true,
         "emailVerificationCreatedAt": "2025-03-22T10:48:53.389Z",
-        "passwordResetExpires": null,
-        "wrongLoginAttempts": 0,
-        "isBlocked": false,
         "createdAt": "2025-03-21T15:03:32.246Z",
         "updatedAt": "2025-03-22T10:50:37.406Z"
     },
