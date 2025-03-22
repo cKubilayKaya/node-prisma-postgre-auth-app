@@ -1,4 +1,4 @@
-export const resendCodeTimeLimit = (user, timeField) => {
+export const codeTimeLimit = (user, timeField) => {
   const currentTime = new Date().getTime() + 3 * 60 * 60 * 1000;
   const resetCreatedAt = new Date(user[timeField]).getTime();
   const timeDifference = currentTime - resetCreatedAt;

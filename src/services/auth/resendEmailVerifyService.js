@@ -4,19 +4,15 @@ import bcrypt from "bcrypt";
 import { generateVerificationCode } from "../../utils/generateVerificationCode.js";
 import { sendEmail } from "../emailService.js";
 import { emailVerificationHTML } from "../../email-templates/emailVerificationHTML.js";
-import { resendCodeTimeLimit } from "../../utils/resendVerificationTimeLimit.js";
+import { codeTimeLimit } from "../../utils/codeTimeLimit.js";
 
 export const resendEmailVerifyService = async (email) => {
-  if (!email) {
-    throw new Error("Email required!");
-  }
-
   const user = await isUserExist({ key: "email", value: email }, true);
 
   if (!user) throw new Error("There is no such a user!");
   if (user?.isEmailVerified) throw new Error("This user is already verified!");
 
-  resendCodeTimeLimit(user, "emailVerificationCreatedAt");
+  codeTimeLimit(user, "emailVerificationCreatedAt");
 
   const newVerificationCode = generateVerificationCode();
   const hashedVerificationCode = await bcrypt.hash(newVerificationCode, 10);

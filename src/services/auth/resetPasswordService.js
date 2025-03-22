@@ -3,7 +3,7 @@ import { sendEmail } from "../emailService.js";
 import bcrypt from "bcrypt";
 import { generateVerificationCode } from "../../utils/generateVerificationCode.js";
 import { forgotPasswordHTML } from "../../email-templates/forgotPasswordHTML.js";
-import { resendCodeTimeLimit } from "../../utils/resendVerificationTimeLimit.js";
+import { codeTimeLimit } from "../../utils/codeTimeLimit.js";
 
 export const forgotPasswordService = async (email) => {
   if (!email) throw new Error("Email is required!");
@@ -11,7 +11,7 @@ export const forgotPasswordService = async (email) => {
   const user = await prisma.user.findUnique({ where: { email } });
   if (!user) throw new Error("No user found with this email!");
 
-  resendCodeTimeLimit(user, "passwordResetExpires");
+  codeTimeLimit(user, "passwordResetExpires");
 
   const resetCode = generateVerificationCode();
   const hashedCode = await bcrypt.hash(resetCode, 10);

@@ -14,8 +14,8 @@ model User {
   fullname                   String?
   password                   String
   isEmailVerified            Boolean   @default(false)
-  emailVerificationCode      String
-  emailVerificationCreatedAt DateTime  @default(now())
+  emailVerificationCode      String?
+  emailVerificationCreatedAt DateTime? @default(now())
   passwordResetCode          String?
   passwordResetExpires       DateTime?
   createdAt                  DateTime  @default(now())
