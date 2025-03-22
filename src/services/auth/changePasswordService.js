@@ -22,6 +22,8 @@ export const changePasswordService = async (code, password, rePassword, email) =
       password: hashedPassword,
       passwordResetCode: null,
       passwordResetExpires: null,
+      isBlocked: false,
+      wrongLoginAttempts: 0,
     },
   });
 
