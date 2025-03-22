@@ -6,8 +6,6 @@ import { forgotPasswordHTML } from "../../email-templates/forgotPasswordHTML.js"
 import { codeTimeLimit } from "../../utils/codeTimeLimit.js";
 
 export const forgotPasswordService = async (email) => {
-  if (!email) throw new Error("Email is required!");
-
   const user = await prisma.user.findUnique({ where: { email } });
   if (!user) throw new Error("No user found with this email!");
 
