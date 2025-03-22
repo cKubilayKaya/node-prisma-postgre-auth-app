@@ -1,9 +1,15 @@
-export const resendVerificationTimeLimit = (user) => {
-  const currentTime = new Date().getTime(); // Şu anki zaman
-  const verificationCreatedAt = new Date(user.emailVerificationCreatedAt).getTime(); // Kullanıcının doğrulama kodu oluşturulma zamanı
-  const verificationTimeLimit = process.env.VERIFICATION_TIME_LIMIT; // Süre limiti (milisaniye cinsine çevrilmeli)
+export const resendCodeTimeLimit = (user, timeField) => {
+  const currentTime = new Date().getTime() + 3 * 60 * 60 * 1000;
+  const resetCreatedAt = new Date(user[timeField]).getTime();
+  const timeDifference = currentTime - resetCreatedAt;
+  const seconds = Math.round(Math.abs(timeDifference) / 1000);
 
-  if (currentTime - verificationCreatedAt < verificationTimeLimit) {
-    throw new Error("You can only request a new verification code after the previous one expires.");
+  const error = {
+    message: "You must wait a while before sending a new code.",
+    time: seconds,
+  };
+
+  if (timeDifference < 0) {
+    throw new Error(JSON.stringify(error));
   }
 };

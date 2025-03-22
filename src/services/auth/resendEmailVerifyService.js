@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 import { generateVerificationCode } from "../../utils/generateVerificationCode.js";
 import { sendEmail } from "../emailService.js";
 import { emailVerificationHTML } from "../../email-templates/emailVerificationHTML.js";
-import { resendVerificationTimeLimit } from "../../utils/resendVerificationTimeLimit.js";
+import { resendCodeTimeLimit } from "../../utils/resendVerificationTimeLimit.js";
 
 export const resendEmailVerifyService = async (email) => {
   if (!email) {
@@ -16,16 +16,19 @@ export const resendEmailVerifyService = async (email) => {
   if (!user) throw new Error("There is no such a user!");
   if (user?.isEmailVerified) throw new Error("This user is already verified!");
 
-  resendVerificationTimeLimit(user);
+  resendCodeTimeLimit(user, "emailVerificationCreatedAt");
 
-  const newVerificationCode = generateVerificationCode(); // 6 haneli kod
+  const newVerificationCode = generateVerificationCode();
   const hashedVerificationCode = await bcrypt.hash(newVerificationCode, 10);
+
+  const expirationTime = new Date(Date.now() + Number(process.env.VERIFICATION_TIME_LIMIT));
+  expirationTime.setUTCHours(expirationTime.getUTCHours() + 3);
 
   await prisma.user.update({
     where: { email },
     data: {
       emailVerificationCode: hashedVerificationCode,
-      emailVerificationCreatedAt: new Date(),
+      emailVerificationCreatedAt: expirationTime,
     },
   });
 

@@ -7,6 +7,7 @@ import { loginController } from "../controllers/auth/loginController.js";
 import { emailVerifySchema } from "../validations/auth/emailVerifySchema.js";
 import { emailVerifyController } from "../controllers/auth/emailVerifyController.js";
 import { resendEmailVerifyController } from "../controllers/auth/resendEmailVerifyController.js";
+import { forgotPasswordController } from "../controllers/auth/forgotPasswordController.js";
 
 const router = express.Router();
 
@@ -14,5 +15,7 @@ router.post("/register", validationMiddleware(registerSchema), registerControlle
 router.post("/login", validationMiddleware(loginSchema), loginController);
 router.post("/email-verify", validationMiddleware(emailVerifySchema), emailVerifyController);
 router.post("/resend-email", resendEmailVerifyController);
+router.post("/forgot-password", forgotPasswordController);
+// router.post("/change-password", resetPasswordController);
 
 export default router;
