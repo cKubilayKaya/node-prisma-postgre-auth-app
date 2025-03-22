@@ -28,8 +28,6 @@ export const resendEmailVerifyService = async (email) => {
     },
   });
 
-  const { id: userId, password, ...filteredUser } = user;
-
   const emailResponse = await sendEmail(email, user?.fullname, "Email Verification Code", emailVerificationHTML(newVerificationCode));
 
   if (!emailResponse || emailResponse.error) throw new Error("Email couldn't be sent.");

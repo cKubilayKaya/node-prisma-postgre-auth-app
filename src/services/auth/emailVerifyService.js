@@ -23,7 +23,17 @@ export const emailVerifyService = async (emailVerificationCode, id) => {
     },
   });
 
-  const { id: userId, password, emailVerificationCode: userEmailVerificationCode, passwordResetCode, ...filteredUser } = updatedUser;
+  const {
+    id: userId,
+    password,
+    emailVerificationCode: userEmailVerificationCode,
+    passwordResetCode,
+    emailVerificationCreatedAt,
+    passwordResetExpires,
+    wrongLoginAttempts,
+    isBlocked,
+    ...filteredUser
+  } = updatedUser;
 
   return filteredUser;
 };

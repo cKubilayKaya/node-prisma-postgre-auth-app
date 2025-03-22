@@ -124,16 +124,7 @@ Content-Type: application/json
 ```json
 {
     "success": true,
-    "user": {
-        "email": "test_user@test.com",
-        "username": "test_user",
-        "fullname": "Test User",
-        "isEmailVerified": true,
-        "emailVerificationCreatedAt": "2025-03-22T10:48:53.389Z",
-        "createdAt": "2025-03-21T15:03:32.246Z",
-        "updatedAt": "2025-03-22T10:50:37.406Z"
-    },
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NTgyY2QxLWRhYTktNDYzMi1iZDViLTAzY2E2Y2IxYjQ4ZCIsImVtYWlsIjoia2t1YmlsYXkyNEBnbWFpbC5jb20iLCJ1c2VybmFtZSI6Imt1YmlsYXk0IiwiZnVsbG5hbWUiOiJrdWJpbGF5IGtheWEiLCJpYXQiOjE3NDI2NDA2NDcsImV4cCI6MTc0MjY0NDI0N30.00qJROZ5HXMBZkwGF_MDDWGIIUFcBGH2teeUD1zRb-g"
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NTgyY2QxLWRhYTktNDYzMi1iZDViLTAzY2E2Y2IxYjQ4ZCIsImVtYWlsIjoia2t1YmlsYXkyNEBnbWFpbC5jb20iLCJ1c2VybmFtZSI6Imt1YmlsYXk0IiwiZnVsbG5hbWUiOiJrdWJpbGF5IGtheWEiLCJpYXQiOjE3NDI2NDI4NDgsImV4cCI6MTc0MjY0NjQ0OH0.LHRVtRYalwL29TE8S181qzk5MQudMytUTA53Orq1lIw"
 }
 ```
 

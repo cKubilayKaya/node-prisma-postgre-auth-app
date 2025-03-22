@@ -29,5 +29,18 @@ export const registerService = async (data) => {
 
   if (!emailResponse || emailResponse.error) throw new Error("Email couldn't be sent.");
 
-  return user;
+  const {
+    id: userId,
+    password: userPassword,
+    emailVerificationCode: userEmailVerificationCode,
+    isEmailVerified,
+    emailVerificationCreatedAt,
+    passwordResetCode,
+    passwordResetExpires,
+    wrongLoginAttempts,
+    isBlocked,
+    ...filteredUser
+  } = user;
+
+  return filteredUser;
 };
