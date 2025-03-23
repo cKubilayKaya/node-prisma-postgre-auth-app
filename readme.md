@@ -228,3 +228,69 @@ Content-Type: application/json
     "message": "Verification code be sent!"
 }
 ```
+
+### GET `/api/auth/me`
+
+Giriş yapmış kullanıcının bilgilerini döner.
+
+### Örnek İstek
+
+```bash
+GET http://localhost:5000/api/auth/me
+Content-Type: application/json
+Authorization token
+```
+
+### Başarılı Yanıt
+
+```json
+{
+    "success": true,
+    "user": {
+        "id": "67582cd1-daa9-4632-bd5b-03ca6cb1b48d",
+        "email": "test_user@test.com",
+        "username": "test_user",
+        "fullname": "Test user",
+        "isEmailVerified": true,
+        "emailVerificationCode": null,
+        "emailVerificationCreatedAt": null,
+        "passwordResetCode": null,
+        "passwordResetExpires": null,
+        "wrongLoginAttempts": 0,
+        "isBlocked": false,
+        "createdAt": "2025-03-21T15:03:32.246Z",
+        "updatedAt": "2025-03-23T11:14:48.416Z"
+    }
+}
+```
+
+### GET `/api/auth/profile`
+
+Giriş yapmış kullanıcının bilgilerini günceller.
+
+### Örnek İstek
+
+```bash
+GET http://localhost:5000/api/auth/profile
+Content-Type: application/json
+Authorization token
+
+{
+    "fullname":"test"
+}
+```
+
+### Başarılı Yanıt
+
+```json
+{
+    "success": true,
+    "user": {
+        "email": "test_user@test.com",
+        "username": "test_user",
+        "fullname": "test",
+        "createdAt": "2025-03-21T15:03:32.246Z",
+        "updatedAt": "2025-03-23T11:29:12.576Z"
+    }
+}
+```
