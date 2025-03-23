@@ -12,14 +12,22 @@ import { changePasswordController } from "../controllers/auth/changePasswordCont
 import { forgotPasswordSchema } from "../validations/auth/forgotPasswordSchema.js";
 import { resendEmailSchema } from "../validations/auth/resendEmailSchema.js";
 import { changePasswordSchema } from "../validations/auth/changePasswordSchema.js";
+import { meController } from "../controllers/auth/meController.js";
+import { authenticateUser } from "../middleware/authenticateUser.js";
+import { profileController } from "../controllers/auth/profileController.js";
 
 const router = express.Router();
 
 router.post("/register", validationMiddleware(registerSchema), registerController);
 router.post("/login", validationMiddleware(loginSchema), loginController);
+
 router.post("/email-verify", validationMiddleware(emailVerifySchema), emailVerifyController);
 router.post("/resend-email", validationMiddleware(resendEmailSchema), resendEmailVerifyController);
+
 router.post("/forgot-password", validationMiddleware(forgotPasswordSchema), forgotPasswordController);
 router.post("/change-password", validationMiddleware(changePasswordSchema), changePasswordController);
+
+router.get("/me", authenticateUser, meController);
+router.put("/profile", authenticateUser, profileController);
 
 export default router;
