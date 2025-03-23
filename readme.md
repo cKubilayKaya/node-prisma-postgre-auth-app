@@ -264,14 +264,14 @@ Authorization token
 }
 ```
 
-### GET `/api/auth/profile`
+### PUT `/api/auth/profile`
 
 Giriş yapmış kullanıcının bilgilerini günceller.
 
 ### Örnek İstek
 
 ```bash
-GET http://localhost:5000/api/auth/profile
+PUT http://localhost:5000/api/auth/profile
 Content-Type: application/json
 Authorization token
 
