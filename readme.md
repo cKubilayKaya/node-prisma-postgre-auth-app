@@ -207,8 +207,6 @@ Content-Type: application/json
 
 ### POST `/api/auth/resend-email`
 
-E-posta doğrulama işlemi.
-
 ### Örnek İstek
 
 ```bash
@@ -230,8 +228,6 @@ Content-Type: application/json
 ```
 
 ### GET `/api/auth/me`
-
-Giriş yapmış kullanıcının bilgilerini döner.
 
 ### Örnek İstek
 
@@ -265,8 +261,6 @@ Authorization token
 ```
 
 ### PUT `/api/auth/profile`
-
-Giriş yapmış kullanıcının bilgilerini günceller.
 
 ### Örnek İstek
 
