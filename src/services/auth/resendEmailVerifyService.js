@@ -5,6 +5,7 @@ import { generateVerificationCode } from "../../utils/generateVerificationCode.j
 import { sendEmail } from "../emailService.js";
 import { emailVerificationHTML } from "../../email-templates/emailVerificationHTML.js";
 import { codeTimeLimit } from "../../utils/codeTimeLimit.js";
+import { CustomError } from "../../utils/customError.js";
 
 export const resendEmailVerifyService = async (email) => {
   const user = await isUserExist({ key: "email", value: email }, true);
@@ -12,7 +13,11 @@ export const resendEmailVerifyService = async (email) => {
   if (!user) throw new Error("There is no such a user!");
   if (user?.isEmailVerified) throw new Error("This user is already verified!");
 
-  codeTimeLimit(user, "emailVerificationCreatedAt");
+  try {
+    codeTimeLimit(user, "emailVerificationCreatedAt");
+  } catch (error) {
+    throw new CustomError(error.message, 429); // 429 Too Many Requests
+  }
 
   const newVerificationCode = generateVerificationCode();
   const hashedVerificationCode = await bcrypt.hash(newVerificationCode, 10);

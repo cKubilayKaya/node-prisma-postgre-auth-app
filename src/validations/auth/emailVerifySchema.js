@@ -1,7 +1,7 @@
 import Joi from "joi";
-import { uuidSchema, verificationCode } from "../index.js";
+import { emailValidation, verificationCode } from "../index.js";
 
 export const emailVerifySchema = Joi.object({
-  id: uuidSchema(),
+  email: emailValidation(),
   emailVerificationCode: verificationCode(),
 });

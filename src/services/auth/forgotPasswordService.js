@@ -4,12 +4,17 @@ import bcrypt from "bcrypt";
 import { generateVerificationCode } from "../../utils/generateVerificationCode.js";
 import { forgotPasswordHTML } from "../../email-templates/forgotPasswordHTML.js";
 import { codeTimeLimit } from "../../utils/codeTimeLimit.js";
+import { CustomError } from "../../utils/customError.js";
 
 export const forgotPasswordService = async (email) => {
   const user = await prisma.user.findUnique({ where: { email } });
   if (!user) throw new Error("No user found with this email!");
 
-  codeTimeLimit(user, "passwordResetExpires");
+  try {
+    codeTimeLimit(user, "passwordResetExpires");
+  } catch (error) {
+    throw new CustomError(error.message, 429);
+  }
 
   const resetCode = generateVerificationCode();
   const hashedCode = await bcrypt.hash(resetCode, 10);

@@ -7,6 +7,10 @@ import { emailVerificationHTML } from "../../email-templates/emailVerificationHT
 
 export const registerService = async (data) => {
   const { fullname, username, email, password } = data;
+
+  const expirationTime = new Date(Date.now() + Number(process.env.VERIFICATION_TIME_LIMIT));
+  expirationTime.setUTCHours(expirationTime.getUTCHours() + 3);
+
   await isUserExist({ key: "email", value: email }, false);
 
   const salt = await bcrypt.genSalt(10);
@@ -22,6 +26,7 @@ export const registerService = async (data) => {
       email: email,
       password: hashedPassword,
       emailVerificationCode: hashedEmailVerificationCode,
+      emailVerificationCreatedAt: expirationTime,
     },
   });
 

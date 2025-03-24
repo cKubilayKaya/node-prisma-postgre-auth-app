@@ -1,4 +1,5 @@
-import { forgotPasswordService } from "../../services/auth/resetPasswordService.js";
+import { forgotPasswordService } from "../../services/auth/forgotPasswordService.js";
+import { CustomError } from "../../utils/customError.js";
 
 export const forgotPasswordController = async (req, res) => {
   try {
@@ -6,7 +7,16 @@ export const forgotPasswordController = async (req, res) => {
     const forgotPassword = await forgotPasswordService(email);
     res.status(200).json({ success: true, ...forgotPassword });
   } catch (error) {
-    const err = typeof error.message === "string" ? error.message : JSON.parse(error.message);
-    res.status(500).json({ success: false, message: err });
+    let statusCode = 500;
+    let errMessage = { message: "Internal Server Error" };
+
+    if (error instanceof CustomError) {
+      statusCode = error.statusCode;
+      errMessage = JSON.parse(error.message);
+    } else if (error instanceof Error) {
+      errMessage = { message: error.message };
+    }
+
+    res.status(statusCode).json({ success: false, ...errMessage });
   }
 };
