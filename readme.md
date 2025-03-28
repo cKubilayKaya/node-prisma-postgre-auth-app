@@ -22,6 +22,7 @@ Bu proje, Node.js kullanarak kullanıcı kimlik doğrulama işlemlerini gerçekl
 - **Şifre Sıfırlama**: Şifresini unutan kullanıcılar, e-posta yoluyla şifrelerini sıfırlayabilir veya bloklanmış bir hesabı tekrar aktif hale getirmek için yine bu özellik kullanılabilir.​
 - **E-posta Doğrulama**: Kullanıcıların e-posta adreslerini doğrulamaları için sistem tarafından bir doğrulama kodu gönderilir.​
 - **Hesap Kilitleme**: 5 kez hatalı giriş yapan kullanıcıların hesapları kilitlenir.
+- **Global Hata Yönetimi**: Uygulama, hata durumlarını düzgün bir şekilde yönetmek için global bir hata işleme sistemi içerir. Bu sistem, hata mesajlarını ve HTTP durum kodlarını tutarlı bir şekilde kullanıcıya sunar. Her türlü hata, uygun şekilde yakalanır ve kullanıcıya açıklayıcı bir mesajla bildirilir. Ek olarak, dinamik hata verileri (örneğin, bekleme süresi) de eklenebilir.
 
 ## Kurulum
 
