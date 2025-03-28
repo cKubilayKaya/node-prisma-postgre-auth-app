@@ -8,13 +8,9 @@ import { CustomError } from "../../utils/customError.js";
 
 export const forgotPasswordService = async (email) => {
   const user = await prisma.user.findUnique({ where: { email } });
-  if (!user) throw new Error("No user found with this email!");
+  if (!user) throw new CustomError("No user found with this email!", 404);
 
-  try {
-    codeTimeLimit(user, "passwordResetExpires");
-  } catch (error) {
-    throw new CustomError(error.message, 429);
-  }
+  codeTimeLimit(user, "passwordResetExpires");
 
   const resetCode = generateVerificationCode();
   const hashedCode = await bcrypt.hash(resetCode, 10);
@@ -32,7 +28,7 @@ export const forgotPasswordService = async (email) => {
 
   const emailResponse = await sendEmail(email, user.fullname, "Password Reset Code", forgotPasswordHTML(resetCode));
 
-  if (!emailResponse || emailResponse.error) throw new Error("Email couldn't be sent.");
+  if (!emailResponse || emailResponse.error) throw new CustomError("Email couldn't be sent.", 500);
 
-  return { message: "Password reset code sent successfully!" };
+  return { success: true, message: "Password reset code sent successfully!" };
 };

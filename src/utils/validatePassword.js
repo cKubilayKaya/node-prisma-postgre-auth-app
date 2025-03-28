@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
 import prisma from "./prisma.js";
+import { CustomError } from "./customError.js";
 
 export const validatePassword = async (unHashedPassword, user) => {
   const userUpdate = async (block, number) => {
@@ -18,10 +19,10 @@ export const validatePassword = async (unHashedPassword, user) => {
   if (!password) {
     if (wrongLoginAttempsNumber === 5) {
       await userUpdate(true, wrongLoginAttempsNumber);
-      throw new Error("Your account is blocked! Change your password for unblock your account.");
+      throw new CustomError("Your account is blocked! Change your password for unblock your account.", 403);
     } else {
       await userUpdate(false, wrongLoginAttempsNumber);
-      throw new Error(`Invalid Password! You have ${5 - wrongLoginAttempsNumber} incorrect entries left.`);
+      throw new CustomError(`Invalid Password! You have ${5 - wrongLoginAttempsNumber} incorrect entries left.`, 401);
     }
   }
 

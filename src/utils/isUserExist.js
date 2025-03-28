@@ -1,3 +1,4 @@
+import { CustomError } from "./customError.js";
 import prisma from "./prisma.js";
 
 export const isUserExist = async (field, findByEmailOrUsername = false) => {
@@ -10,6 +11,6 @@ export const isUserExist = async (field, findByEmailOrUsername = false) => {
   if (findByEmailOrUsername) {
     return existingUser;
   } else {
-    if (existingUser) throw new Error("This user already exists.");
+    if (existingUser) throw new CustomError("This user already exists.", 409);
   }
 };

@@ -1,5 +1,6 @@
 import nodemailer from "nodemailer";
 import { emailConfig } from "../config/emailConfig.js";
+import { CustomError } from "../utils/customError.js";
 
 const transporter = nodemailer.createTransport({
   host: emailConfig.host,
@@ -22,7 +23,7 @@ export const sendEmail = async (to, name, subject, html) => {
     const info = await transporter.sendMail(mailOptions);
     return info?.messageId;
   } catch (error) {
-    console.error("E-posta gönderme hatası:", error);
-    throw new Error("E-posta gönderilemedi");
+    console.error("Email couldn't be sent:", error);
+    throw new CustomError("Email couldn't be sent.", 500);
   }
 };

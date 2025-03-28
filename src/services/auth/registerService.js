@@ -4,6 +4,8 @@ import prisma from "../../utils/prisma.js";
 import { sendEmail } from "../emailService.js";
 import { generateVerificationCode } from "../../utils/generateVerificationCode.js";
 import { emailVerificationHTML } from "../../email-templates/emailVerificationHTML.js";
+import { CustomError } from "../../utils/customError.js";
+import excludeFieldsFromArray from "../../utils/excludeFieldsFromArray.js";
 
 export const registerService = async (data) => {
   const { fullname, username, email, password } = data;
@@ -32,20 +34,21 @@ export const registerService = async (data) => {
 
   const emailResponse = await sendEmail(email, fullname, "Email Verification Code", emailVerificationHTML(emailVerificationCode));
 
-  if (!emailResponse || emailResponse.error) throw new Error("Email couldn't be sent.");
+  if (!emailResponse || emailResponse.error) throw new CustomError("Email couldn't be sent.", 500);
 
-  const {
-    id: userId,
-    password: userPassword,
-    emailVerificationCode: userEmailVerificationCode,
-    isEmailVerified,
-    emailVerificationCreatedAt,
-    passwordResetCode,
-    passwordResetExpires,
-    wrongLoginAttempts,
-    isBlocked,
-    ...filteredUser
-  } = user;
+  const excludeFileds = [
+    "id",
+    "password",
+    "emailVerificationCode",
+    "isEmailVerified",
+    "emailVerificationCreatedAt",
+    "passwordResetCode",
+    "passwordResetExpires",
+    "wrongLoginAttempts",
+    "isBlocked",
+  ];
 
-  return filteredUser;
+  const filteredUser = excludeFieldsFromArray(excludeFileds, user);
+
+  return { success: true, user: filteredUser };
 };

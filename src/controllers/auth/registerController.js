@@ -1,11 +1,11 @@
 import { registerService } from "../../services/auth/registerService.js";
 
-export const registerController = async (req, res) => {
+export const registerController = async (req, res, next) => {
   const data = req.body;
   try {
-    const user = await registerService(data);
-    res.status(201).json({ success: true, user: user });
+    const userRes = await registerService(data);
+    res.status(201).json(userRes);
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 };

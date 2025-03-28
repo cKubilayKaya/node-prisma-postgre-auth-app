@@ -2,17 +2,18 @@ import { isUserExist } from "../../utils/isUserExist.js";
 import prisma from "../../utils/prisma.js";
 import bcrypt from "bcrypt";
 import { verifyTimeLimit } from "../../utils/verifyTimeLimit.js";
+import { CustomError } from "../../utils/customError.js";
 
 export const emailVerifyService = async (emailVerificationCode, email) => {
   const user = await isUserExist({ key: "email", value: email }, true);
 
-  if (!user) throw new Error("There is no such a user!");
-  if (user?.isEmailVerified) throw new Error("This user is already verified!");
+  if (!user) throw new CustomError("There is no such a user!", 404);
+  if (user?.isEmailVerified) throw new CustomError("This user is already verified!", 400);
 
   verifyTimeLimit(user, "emailVerificationCreatedAt");
 
   const isMatch = await bcrypt.compare(emailVerificationCode, user.emailVerificationCode);
-  if (!isMatch) throw new Error("Wrong Email Verification Code!");
+  if (!isMatch) throw new CustomError("Wrong Email Verification Code!", 400);
 
   const updatedUser = await prisma.user.update({
     where: { email },
@@ -23,17 +24,18 @@ export const emailVerifyService = async (emailVerificationCode, email) => {
     },
   });
 
-  const {
-    id: userId,
-    password,
-    emailVerificationCode: userEmailVerificationCode,
-    passwordResetCode,
-    emailVerificationCreatedAt,
-    passwordResetExpires,
-    wrongLoginAttempts,
-    isBlocked,
-    ...filteredUser
-  } = updatedUser;
+  const excludeFileds = [
+    "id",
+    "password",
+    "emailVerificationCode",
+    "passwordResetCode",
+    "emailVerificationCreatedAt",
+    "passwordResetExpires",
+    "wrongLoginAttempts",
+    "isBlocked",
+  ];
 
-  return filteredUser;
+  const filteredUser = excludeFieldsFromArray(excludeFileds, updatedUser);
+
+  return { success: true, user: filteredUser };
 };

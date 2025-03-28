@@ -1,11 +1,11 @@
 import { meService } from "../../services/auth/meService.js";
 
-export const meController = async (req, res) => {
+export const meController = async (req, res, next) => {
   try {
     const token = req?.header("Authorization")?.includes(" ") ? req?.header("Authorization")?.split(" ")[1] : req?.header("Authorization");
-    const { userObject } = await meService(token);
-    res.status(200).json({ success: true, user: userObject });
+    const meRes = await meService(token);
+    res.status(200).json(meRes);
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 };

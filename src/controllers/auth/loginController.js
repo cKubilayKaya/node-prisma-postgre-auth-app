@@ -1,11 +1,11 @@
 import { loginService } from "../../services/auth/loginService.js";
 
-export const loginController = async (req, res) => {
+export const loginController = async (req, res, next) => {
   const data = req.body;
   try {
-    const { token, userObject } = await loginService(data);
-    res.status(201).json({ success: true, token: token, user: userObject });
+    const loginRes = await loginService(data);
+    res.status(200).json(loginRes);
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 };

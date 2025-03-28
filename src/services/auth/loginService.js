@@ -6,9 +6,9 @@ export const loginService = async (data) => {
   const { email, password } = data;
   const user = await isUserExist({ key: "email", value: email }, true);
 
-  if (!user) throw new Error("Email or password is not correct!");
-  if (user?.isBlocked) throw new Error("This user is blocked! Please change your password for unblock your account.");
-  if (!user?.isEmailVerified) throw new Error("This user's email is not verified!");
+  if (!user) throw new CustomError("Email or password is not correct!", 401);
+  if (user?.isBlocked) throw new CustomError("This user is blocked! Please reset your password to unblock your account.", 403);
+  if (!user?.isEmailVerified) throw new CustomError("This user's email is not verified!", 403);
 
   await validatePassword(password, user);
 
@@ -18,5 +18,5 @@ export const loginService = async (data) => {
     expiresIn: "1h",
   });
 
-  return { token, userObject };
+  return { success: true, token, user: userObject };
 };

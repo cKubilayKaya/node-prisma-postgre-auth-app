@@ -1,9 +1,11 @@
 import jwt from "jsonwebtoken";
 import prisma from "../../utils/prisma.js";
+import excludeFieldsFromArray from "../../utils/excludeFieldsFromArray.js";
+import { CustomError } from "../../utils/customError.js";
 
 export const profileService = async (data, token) => {
   const decodedUser = jwt.verify(token, process.env.JWT_SECRET_KEY);
-  if (!decodedUser?.id) throw new Error("Invalid token!");
+  if (!decodedUser?.id) throw new CustomError("Invalid token!", 400);
   const id = decodedUser?.id;
 
   const updatedUser = await prisma.user.update({
@@ -13,18 +15,19 @@ export const profileService = async (data, token) => {
     data: data,
   });
 
-  const {
-    id: userId,
-    password: userPassword,
-    emailVerificationCode: userEmailVerificationCode,
-    isEmailVerified,
-    emailVerificationCreatedAt,
-    passwordResetCode,
-    passwordResetExpires,
-    wrongLoginAttempts,
-    isBlocked,
-    ...userObject
-  } = updatedUser;
+  const excludeFileds = [
+    "id",
+    "password",
+    "emailVerificationCode",
+    "isEmailVerified",
+    "emailVerificationCreatedAt",
+    "passwordResetCode",
+    "passwordResetExpires",
+    "wrongLoginAttempts",
+    "isBlocked",
+  ];
 
-  return { userObject };
+  const filteredUser = excludeFieldsFromArray(excludeFileds, updatedUser);
+
+  return { success: true, user: filteredUser };
 };

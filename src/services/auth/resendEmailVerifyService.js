@@ -10,14 +10,10 @@ import { CustomError } from "../../utils/customError.js";
 export const resendEmailVerifyService = async (email) => {
   const user = await isUserExist({ key: "email", value: email }, true);
 
-  if (!user) throw new Error("There is no such a user!");
-  if (user?.isEmailVerified) throw new Error("This user is already verified!");
+  if (!user) throw new CustomError("There is no such a user!", 404);
+  if (user?.isEmailVerified) throw new CustomError("This user is already verified!", 400);
 
-  try {
-    codeTimeLimit(user, "emailVerificationCreatedAt");
-  } catch (error) {
-    throw new CustomError(error.message, 429); // 429 Too Many Requests
-  }
+  codeTimeLimit(user, "emailVerificationCreatedAt");
 
   const newVerificationCode = generateVerificationCode();
   const hashedVerificationCode = await bcrypt.hash(newVerificationCode, 10);
@@ -35,7 +31,7 @@ export const resendEmailVerifyService = async (email) => {
 
   const emailResponse = await sendEmail(email, user?.fullname, "Email Verification Code", emailVerificationHTML(newVerificationCode));
 
-  if (!emailResponse || emailResponse.error) throw new Error("Email couldn't be sent.");
+  if (!emailResponse || emailResponse.error) throw new CustomError("Email couldn't be sent.", 500);
 
-  return { message: "Verification code be sent!" };
+  return { success: true, message: "Verification code be sent!" };
 };
