@@ -1,3 +1,4 @@
+import { CustomError } from "../../utils/customError.js";
 import { isUserExist } from "../../utils/isUserExist.js";
 import { validatePassword } from "../../utils/validatePassword.js";
 import jwt from "jsonwebtoken";

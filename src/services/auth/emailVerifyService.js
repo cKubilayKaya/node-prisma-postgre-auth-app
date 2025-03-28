@@ -3,8 +3,9 @@ import prisma from "../../utils/prisma.js";
 import bcrypt from "bcrypt";
 import { verifyTimeLimit } from "../../utils/verifyTimeLimit.js";
 import { CustomError } from "../../utils/customError.js";
+import excludeFieldsFromArray from "../../utils/excludeFieldsFromArray.js";
 
-export const emailVerifyService = async (emailVerificationCode, email) => {
+export const emailVerifyService = async (email, code) => {
   const user = await isUserExist({ key: "email", value: email }, true);
 
   if (!user) throw new CustomError("There is no such a user!", 404);
@@ -12,7 +13,7 @@ export const emailVerifyService = async (emailVerificationCode, email) => {
 
   verifyTimeLimit(user, "emailVerificationCreatedAt");
 
-  const isMatch = await bcrypt.compare(emailVerificationCode, user.emailVerificationCode);
+  const isMatch = await bcrypt.compare(code, user.emailVerificationCode);
   if (!isMatch) throw new CustomError("Wrong Email Verification Code!", 400);
 
   const updatedUser = await prisma.user.update({
